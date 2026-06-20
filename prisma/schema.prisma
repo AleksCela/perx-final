@@ -1,0 +1,275 @@
+// Perx — two-sided benefits marketplace (MVP)
+// SQLite has no native enums, so status/role fields are Strings with documented values.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Orgs & people
+// ---------------------------------------------------------------------------
+
+/// An employer organisation that funds welfare budgets for its people.
+model Company {
+  id          String       @id @default(cuid())
+  name        String
+  country     String       @default("Albania")
+  currency    String       @default("EUR") // ISO code; drives formatting
+  taxRate     Float        @default(0.41) // employer+employee burden avoided vs. taxed salary
+  departments Department[]
+  users       User[]
+  pools       TeamPool[]
+  createdAt   DateTime     @default(now())
+}
+
+model Department {
+  id        String   @id @default(cuid())
+  name      String
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  users     User[]
+  createdAt DateTime @default(now())
+}
+
+/// role: EMPLOYEE | ADMIN | PROVIDER
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  role          String   @default("EMPLOYEE")
+  initials      String   @default("")
+  color         String   @default("#1F5BE0")
+  companyId     String?
+  company       Company? @relation(fields: [companyId], references: [id])
+  departmentId  String?
+  department    Department? @relation(fields: [departmentId], references: [id])
+  providerId    String?  // set when role = PROVIDER
+  provider      Provider? @relation(fields: [providerId], references: [id])
+
+  budgetTotal   Int      @default(0) // annual welfare budget, in currency units
+  points        Int      @default(0) // gamification points (cached ledger total)
+  streakWeeks   Int      @default(0)
+  stepsThisWeek Int      @default(0)
+  lastSpinAt    DateTime?
+  createdAt     DateTime @default(now())
+
+  orders        Order[]
+  reviews       Review[]
+  reactions     Reaction[]
+  badges        UserBadge[]
+  pointsLedger  PointsEntry[]
+  giftsSent     Gift[]   @relation("GiftFrom")
+  giftsReceived Gift[]   @relation("GiftTo")
+  contributions PoolContribution[]
+  approvals     Order[]  @relation("ApprovedBy")
+}
+
+// ---------------------------------------------------------------------------
+// Catalog
+// ---------------------------------------------------------------------------
+
+model Provider {
+  id          String   @id @default(cuid())
+  name        String
+  city        String   @default("Tirana")
+  tagline     String   @default("")
+  color       String   @default("#FF6A1F")
+  referredBy  String?  // userId who referred them (provider referral feature)
+  createdAt   DateTime @default(now())
+  offers      Offer[]
+  users       User[]
+  payments    Payment[]
+}
+
+model Category {
+  id     String  @id @default(cuid())
+  slug   String  @unique
+  name   String
+  nameSq String  @default("") // Albanian localisation (international-ready)
+  icon   String  @default("ti-sparkles")
+  offers Offer[]
+}
+
+model Offer {
+  id           String   @id @default(cuid())
+  title        String
+  description  String   @default("")
+  price        Int      // current price in currency units
+  originalPrice Int?    // for showing a strike-through / savings
+  icon         String   @default("ti-sparkles")
+  moodTags     String   @default("") // CSV, powers the AI concierge ("calm,solo,weekend")
+  location     String   @default("")
+  distanceKm   Float?
+  active       Boolean  @default(true)
+
+  providerId   String
+  provider     Provider @relation(fields: [providerId], references: [id])
+  categoryId   String
+  category     Category @relation(fields: [categoryId], references: [id])
+
+  createdAt    DateTime @default(now())
+  reviews      Review[]
+  reactions    Reaction[]
+  orderItems   OrderItem[]
+  drop         Drop?
+  gifts        Gift[]
+}
+
+/// A limited-time Friday-style deal attached to an offer.
+model Drop {
+  id            String   @id @default(cuid())
+  offerId       String   @unique
+  offer         Offer    @relation(fields: [offerId], references: [id])
+  headline      Boolean  @default(false)
+  discountPct   Int      @default(40)
+  dropPrice     Int      // discounted price
+  quantityTotal Int      @default(40)
+  quantityClaimed Int    @default(0)
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// The core loop: selection -> approval -> simulated payment
+// ---------------------------------------------------------------------------
+
+/// status: PENDING | APPROVED | REJECTED | PAID
+/// source: MANUAL | CONCIERGE | DROP | MYSTERY | GIFT
+model Order {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  status       String   @default("PENDING")
+  source       String   @default("MANUAL")
+  title        String   @default("Perk selection")
+  total        Int      @default(0)
+  reasoning    String   @default("") // AI explanation when source = CONCIERGE
+  note         String   @default("")
+  createdAt    DateTime @default(now())
+  approvedAt   DateTime?
+  approvedById String?
+  approvedBy   User?    @relation("ApprovedBy", fields: [approvedById], references: [id])
+  items        OrderItem[]
+  payments     Payment[]
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  offerId   String
+  offer     Offer   @relation(fields: [offerId], references: [id])
+  title     String
+  price     Int
+  qty       Int     @default(1)
+}
+
+/// Simulated payment routed to a provider on approval. status: SETTLED
+model Payment {
+  id         String   @id @default(cuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  providerId String
+  provider   Provider @relation(fields: [providerId], references: [id])
+  amount     Int
+  status     String   @default("SETTLED")
+  reference  String
+  createdAt  DateTime @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Engagement, social & gamification
+// ---------------------------------------------------------------------------
+
+model Review {
+  id          String   @id @default(cuid())
+  offerId     String
+  offer       Offer    @relation(fields: [offerId], references: [id])
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  rating      Int      @default(5)
+  body        String   @default("")
+  helpfulCount Int     @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Reaction {
+  id      String @id @default(cuid())
+  offerId String
+  offer   Offer  @relation(fields: [offerId], references: [id])
+  userId  String
+  user    User   @relation(fields: [userId], references: [id])
+  emoji   String // 🔥 😍 💪 etc.
+
+  @@unique([offerId, userId, emoji])
+}
+
+model Badge {
+  id          String      @id @default(cuid())
+  slug        String      @unique
+  name        String
+  icon        String      @default("ti-award")
+  description String      @default("")
+  points      Int         @default(50)
+  users       UserBadge[]
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id])
+  badgeId  String
+  badge    Badge    @relation(fields: [badgeId], references: [id])
+  earnedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+}
+
+/// Append-only points ledger; "ways to earn" history.
+model PointsEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  amount    Int
+  reason    String
+  createdAt DateTime @default(now())
+}
+
+model Gift {
+  id         String   @id @default(cuid())
+  fromUserId String
+  fromUser   User     @relation("GiftFrom", fields: [fromUserId], references: [id])
+  toUserId   String
+  toUser     User     @relation("GiftTo", fields: [toUserId], references: [id])
+  offerId    String?
+  offer      Offer?   @relation(fields: [offerId], references: [id])
+  label      String   @default("")
+  amount     Int      @default(0)
+  message    String   @default("")
+  createdAt  DateTime @default(now())
+}
+
+model TeamPool {
+  id            String   @id @default(cuid())
+  name          String
+  companyId     String
+  company       Company  @relation(fields: [companyId], references: [id])
+  goal          Int
+  createdAt     DateTime @default(now())
+  contributions PoolContribution[]
+}
+
+model PoolContribution {
+  id        String   @id @default(cuid())
+  poolId    String
+  pool      TeamPool @relation(fields: [poolId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  amount    Int
+  createdAt DateTime @default(now())
+}
