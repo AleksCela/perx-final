@@ -24,6 +24,7 @@ model Company {
   departments Department[]
   users       User[]
   pools       TeamPool[]
+  perkRequests PerkRequest[]
   createdAt   DateTime     @default(now())
 }
 
@@ -67,6 +68,8 @@ model User {
   giftsReceived Gift[]   @relation("GiftTo")
   contributions PoolContribution[]
   approvals     Order[]  @relation("ApprovedBy")
+  perkRequests  PerkRequest[] @relation("RequestAuthor")
+  perkVotes     PerkVote[]
 }
 
 // ---------------------------------------------------------------------------
@@ -272,4 +275,36 @@ model PoolContribution {
   user      User     @relation(fields: [userId], references: [id])
   amount    Int
   createdAt DateTime @default(now())
+}
+
+// ---------------------------------------------------------------------------
+// Perk requests — employees vote for / submit the perks they want; the
+// employer sees demand and responds. status: OPEN | PLANNED | LIVE | DECLINED
+// ---------------------------------------------------------------------------
+
+model PerkRequest {
+  id           String   @id @default(cuid())
+  title        String
+  description  String   @default("")
+  categorySlug String   @default("")
+  icon         String   @default("ti-bulb")
+  status       String   @default("OPEN")
+  note         String   @default("") // employer response shown to the team
+  companyId    String
+  company      Company  @relation(fields: [companyId], references: [id])
+  createdById  String?
+  createdBy    User?    @relation("RequestAuthor", fields: [createdById], references: [id])
+  createdAt    DateTime @default(now())
+  votes        PerkVote[]
+}
+
+model PerkVote {
+  id        String      @id @default(cuid())
+  requestId String
+  request   PerkRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  createdAt DateTime    @default(now())
+
+  @@unique([requestId, userId])
 }

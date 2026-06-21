@@ -364,6 +364,54 @@ export async function chipInPool(formData: FormData) {
   revalidateApp();
 }
 
+// --------------------------------------------------------------------------
+// Perk requests — employees vote for / submit the perks they want next
+// --------------------------------------------------------------------------
+
+export async function voteRequest(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) redirect("/");
+  const requestId = String(formData.get("requestId") || "");
+  if (!requestId) return;
+  const existing = await prisma.perkVote.findUnique({
+    where: { requestId_userId: { requestId, userId: user.id } },
+  });
+  if (existing) {
+    await prisma.perkVote.delete({ where: { id: existing.id } });
+  } else {
+    await prisma.perkVote.create({ data: { requestId, userId: user.id } });
+  }
+  revalidatePath("/requests");
+}
+
+export async function submitRequest(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user) redirect("/");
+  const title = String(formData.get("title") || "").trim().slice(0, 100);
+  const description = String(formData.get("description") || "").trim().slice(0, 300);
+  const categorySlug = String(formData.get("category") || "");
+  if (!title || !user.companyId) return;
+  const category = categorySlug
+    ? await prisma.category.findUnique({ where: { slug: categorySlug } })
+    : null;
+  await prisma.perkRequest.create({
+    data: {
+      title,
+      description,
+      categorySlug,
+      icon: category?.icon ?? "ti-bulb",
+      status: "OPEN",
+      companyId: user.companyId,
+      createdById: user.id,
+      // back the idea you just submitted
+      votes: { create: { userId: user.id } },
+    },
+  });
+  await addPoints(user.id, 20, "Suggested a perk");
+  await awardBadge(user.id, "scout");
+  revalidatePath("/requests");
+}
+
 export async function referProvider(formData: FormData) {
   const user = await getCurrentUser();
   if (!user) redirect("/");

@@ -10,6 +10,8 @@ const daysAgo = (d: number) => new Date(Date.now() - d * 86400_000);
 async function main() {
   console.log("Clearing existing data…");
   // Delete in dependency order.
+  await prisma.perkVote.deleteMany();
+  await prisma.perkRequest.deleteMany();
   await prisma.poolContribution.deleteMany();
   await prisma.teamPool.deleteMany();
   await prisma.gift.deleteMany();
@@ -329,6 +331,42 @@ async function main() {
       createdAt: daysAgo(6),
     },
   });
+
+  console.log("Seeding perk wishlist…");
+  const requestIcon: Record<string, string> = {
+    wellness: "ti-yoga", food: "ti-coffee", learning: "ti-book", travel: "ti-plane", relax: "ti-bath",
+  };
+  const requestData: { title: string; cat: string; status: string; note?: string; votes: number; desc: string }[] = [
+    { title: "Therapy & mental-health sessions", cat: "relax", status: "PLANNED", note: "Provider shortlisted — live next month.", votes: 9, desc: "Confidential 1:1 sessions, a few covered per quarter." },
+    { title: "Coworking day passes for remote days", cat: "learning", status: "OPEN", votes: 8, desc: "Drop-in desks around town when WFH gets lonely." },
+    { title: "Padel court membership", cat: "wellness", status: "PLANNED", note: "Booking a partner court for Q3.", votes: 7, desc: "The whole office is obsessed — let's make it a perk." },
+    { title: "Healthy lunch delivery", cat: "food", status: "LIVE", note: "Shipped! Check the Food & coffee category.", votes: 6, desc: "Daily desk lunches from local kitchens." },
+    { title: "EV charging credit", cat: "travel", status: "OPEN", votes: 5, desc: "A monthly top-up for people who drive electric." },
+    { title: "Ski weekend in Brezovica", cat: "travel", status: "OPEN", votes: 4, desc: "A subsidised winter team trip to the slopes." },
+    { title: "Pet-care / vet allowance", cat: "", status: "OPEN", votes: 3, desc: "Help with vet bills and pet-sitting." },
+  ];
+  const employeeIds = Object.values(users).map((u) => u.id);
+  let voteRot = 0;
+  for (const r of requestData) {
+    const voters: string[] = [];
+    for (let i = 0; i < r.votes && i < employeeIds.length; i++) {
+      voters.push(employeeIds[(voteRot + i) % employeeIds.length]);
+    }
+    voteRot += 2;
+    await prisma.perkRequest.create({
+      data: {
+        title: r.title,
+        description: r.desc,
+        categorySlug: r.cat,
+        icon: requestIcon[r.cat] ?? "ti-bulb",
+        status: r.status,
+        note: r.note ?? "",
+        companyId: company.id,
+        createdById: voters[0] ?? null,
+        votes: { create: voters.map((id) => ({ userId: id })) },
+      },
+    });
+  }
 
   console.log("Seeding historical orders (for analytics)…");
   // Helper to create a PAID order with items + payments.
