@@ -13,7 +13,6 @@ export default function TopNav({
   user,
   budgetRemaining,
   currency,
-  points,
   cartCount,
 }: {
   brandHref: string;
@@ -21,7 +20,6 @@ export default function TopNav({
   user: { name: string; initials: string; color: string; role: string };
   budgetRemaining: number | null;
   currency: string;
-  points: number | null;
   cartCount: number;
 }) {
   const pathname = usePathname();
@@ -42,11 +40,6 @@ export default function TopNav({
       </div>
 
       <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
-        {points !== null && (
-          <span className="pill" style={{ background: "rgba(31,91,224,.12)", color: "var(--blue-d)" }}>
-            <i className="ti ti-bolt" /> {points.toLocaleString("en-US")}
-          </span>
-        )}
         {budgetRemaining !== null && (
           <span className="pill" style={{ background: "var(--orange)", color: "#fff" }}>
             <i className="ti ti-ticket" /> {money(budgetRemaining, currency)} left

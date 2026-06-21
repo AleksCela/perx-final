@@ -205,6 +205,84 @@ export async function openMystery() {
 }
 
 // --------------------------------------------------------------------------
+// Marketplace management — HR curates the suggested places / offers
+// --------------------------------------------------------------------------
+
+const NEW_PLACE_COLORS = ["#FF6A1F", "#1F5BE0", "#B23C0A", "#15347E"];
+
+export async function addMarketplaceOffer(formData: FormData) {
+  const admin = await getCurrentUser();
+  if (!admin || admin.role !== "ADMIN") redirect("/");
+  const title = String(formData.get("title") || "").trim().slice(0, 80);
+  const price = Math.max(0, Math.round(Number(formData.get("price") || 0)));
+  const categoryId = String(formData.get("categoryId") || "");
+  let providerId = String(formData.get("providerId") || "");
+  const newProvider = String(formData.get("newProvider") || "").trim().slice(0, 80);
+  const location = String(formData.get("location") || "").trim().slice(0, 80);
+  const moodTags = String(formData.get("moodTags") || "").trim().slice(0, 120);
+  const description = String(formData.get("description") || "").trim().slice(0, 200);
+  if (!title || !categoryId) return;
+
+  if (newProvider) {
+    const color = NEW_PLACE_COLORS[Math.floor(Math.random() * NEW_PLACE_COLORS.length)];
+    const p = await prisma.provider.create({
+      data: { name: newProvider, city: "Tirana", tagline: "Suggested by HR", color },
+    });
+    providerId = p.id;
+  }
+  if (!providerId) return;
+
+  const category = await prisma.category.findUnique({ where: { id: categoryId } });
+  await prisma.offer.create({
+    data: {
+      title,
+      price,
+      providerId,
+      categoryId,
+      icon: category?.icon ?? "ti-sparkles",
+      location,
+      moodTags,
+      description,
+      active: true,
+    },
+  });
+  revalidateApp();
+  revalidatePath("/admin/marketplace");
+}
+
+/** Remove an offer from the marketplace. Hard-deletes if nothing depends on it,
+ *  otherwise just hides it (so existing orders stay intact). */
+export async function removeMarketplaceOffer(formData: FormData) {
+  const admin = await getCurrentUser();
+  if (!admin || admin.role !== "ADMIN") redirect("/");
+  const offerId = String(formData.get("offerId") || "");
+  if (!offerId) return;
+
+  const orderCount = await prisma.orderItem.count({ where: { offerId } });
+  if (orderCount > 0) {
+    await prisma.offer.update({ where: { id: offerId }, data: { active: false } });
+  } else {
+    await prisma.reaction.deleteMany({ where: { offerId } });
+    await prisma.review.deleteMany({ where: { offerId } });
+    await prisma.gift.updateMany({ where: { offerId }, data: { offerId: null } });
+    await prisma.drop.deleteMany({ where: { offerId } });
+    await prisma.offer.delete({ where: { id: offerId } });
+  }
+  revalidateApp();
+  revalidatePath("/admin/marketplace");
+}
+
+export async function restoreMarketplaceOffer(formData: FormData) {
+  const admin = await getCurrentUser();
+  if (!admin || admin.role !== "ADMIN") redirect("/");
+  const offerId = String(formData.get("offerId") || "");
+  if (!offerId) return;
+  await prisma.offer.update({ where: { id: offerId }, data: { active: true } });
+  revalidateApp();
+  revalidatePath("/admin/marketplace");
+}
+
+// --------------------------------------------------------------------------
 // Approvals: employer reviews + simulated payment routing
 // --------------------------------------------------------------------------
 

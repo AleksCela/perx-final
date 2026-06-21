@@ -90,11 +90,11 @@ export default function OfferCard({
           >
             {inCart ? (
               <>
-                <i className="ti ti-check" /> In combo
+                <i className="ti ti-check" /> In cart
               </>
             ) : (
               <>
-                <i className="ti ti-plus" /> Combo
+                <i className="ti ti-plus" /> Add to cart
               </>
             )}
           </button>

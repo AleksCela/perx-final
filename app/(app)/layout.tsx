@@ -2,6 +2,7 @@ import { requireUser } from "@/lib/session";
 import { getBudget } from "@/lib/budget";
 import { getCartIds } from "@/lib/cart";
 import TopNav, { type NavLink } from "../components/TopNav";
+import ChatWidget from "../components/ChatWidget";
 
 export const dynamic = "force-dynamic";
 
@@ -18,6 +19,7 @@ const EMPLOYEE_LINKS: NavLink[] = [
 
 const ADMIN_LINKS: NavLink[] = [
   { href: "/admin", label: "Dashboard", icon: "ti-chart-bar" },
+  { href: "/admin/marketplace", label: "Manage perks", icon: "ti-building-store" },
   { href: "/marketplace", label: "Marketplace", icon: "ti-compass" },
 ];
 
@@ -33,7 +35,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   let links = EMPLOYEE_LINKS;
   let brandHref = "/marketplace";
   let budgetRemaining: number | null = null;
-  let points: number | null = null;
 
   if (user.role === "ADMIN") {
     links = ADMIN_LINKS;
@@ -44,7 +45,6 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   } else {
     const budget = await getBudget(user.id);
     budgetRemaining = budget.remaining;
-    points = user.points;
   }
 
   const cartCount = user.role === "EMPLOYEE" ? (await getCartIds()).length : 0;
@@ -57,10 +57,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         user={{ name: user.name, initials: user.initials, color: user.color, role: user.role }}
         budgetRemaining={budgetRemaining}
         currency={currency}
-        points={points}
         cartCount={cartCount}
       />
       <div className="shell" style={{ paddingTop: 0 }}>{children}</div>
+      <ChatWidget />
     </>
   );
 }
