@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
 import { getCompanyStats } from "@/lib/insights";
-import { money, symbol } from "@/lib/money";
+import { money } from "@/lib/money";
 import { approveOrder, rejectOrder } from "../../actions";
 import CountUp from "../../components/CountUp";
 
@@ -108,12 +108,13 @@ export default async function Admin() {
             <i className="ti ti-trending-up" /> Untaxed value delivered
           </span>
           <div className="d" style={{ fontSize: 48, fontWeight: 800, lineHeight: 1 }}>
-            <CountUp value={stats.taxSaving} prefix={symbol(currency)} />
+            <CountUp value={stats.taxSaving} />
+            <span style={{ fontSize: 26 }}> PX</span>
             <span style={{ color: "var(--orange)", fontSize: 24, fontWeight: 700 }}> saved</span>
           </div>
           <div style={{ fontSize: 13, color: "rgba(251,246,236,.7)", marginTop: 9 }}>
             on {money(stats.benefitValue, currency)} of benefits booked, vs. paying the same value as{" "}
-            <b style={{ color: "#fff" }}>taxed salary</b> · ~{(1 + stats.taxRate).toFixed(2)} of benefit per {symbol(currency)}1 of cost
+            <b style={{ color: "#fff" }}>taxed salary</b> · ~{(1 + stats.taxRate).toFixed(2)} of benefit per 1 PX of cost
           </div>
         </div>
         <div style={{ textAlign: "right", borderLeft: "1px solid rgba(255,255,255,.16)", paddingLeft: 24 }}>

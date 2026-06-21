@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { openMystery } from "../actions";
 import { money } from "@/lib/money";
+import GiftBox from "./GiftBox";
 
 type Reveal = {
   ok: boolean;
@@ -41,7 +42,16 @@ export default function MysteryBox({ currency }: { currency: string }) {
 
       {!reveal ? (
         <>
-          <div style={{ fontSize: 72, margin: "16px 0 6px", transition: "transform .3s", transform: opening ? "scale(1.15) rotate(-6deg)" : "none" }}>🎁</div>
+          <div
+            style={{
+              margin: "16px 0 6px",
+              transition: "transform .3s",
+              transform: opening ? "scale(1.12) rotate(-6deg)" : "none",
+              animation: opening ? "none" : "bob 2.6s ease-in-out infinite",
+            }}
+          >
+            <GiftBox size={104} />
+          </div>
           <div className="kick">A wrapped perk within your budget</div>
           <div style={{ fontSize: 13, color: "var(--muted)", margin: "6px 0 16px" }}>Costs you nothing this time · +75 pts</div>
           <button onClick={open} disabled={pending || opening} className="btn btn-ink" style={{ width: "100%" }}>
@@ -50,7 +60,9 @@ export default function MysteryBox({ currency }: { currency: string }) {
         </>
       ) : reveal.ok ? (
         <div className="pop">
-          <div style={{ fontSize: 64, margin: "14px 0 6px" }}>🎉</div>
+          <div style={{ margin: "10px 0 4px", display: "flex", justifyContent: "center" }}>
+            <GiftBox size={92} variant="open" />
+          </div>
           <div className="kick">You unwrapped</div>
           <div className="d" style={{ fontSize: 28, fontWeight: 800, margin: "6px 0", color: "var(--orange)" }}>{reveal.title}</div>
           <div style={{ fontSize: 13, color: "var(--muted)", marginBottom: 8 }}>

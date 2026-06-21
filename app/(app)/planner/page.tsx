@@ -9,11 +9,11 @@ import { bookCombo } from "../../actions";
 export const dynamic = "force-dynamic";
 
 const EXAMPLES = [
-  "I'm wired and stressed before a launch — something calming this weekend under €60",
-  "Fun active day out with the team, around €50",
-  "Cosy Sunday reset, under €40",
-  "Treat my partner to a date night, up to €80",
-  "Learn something new this month, budget €50",
+  "I'm wired and stressed before a launch — something calming this weekend under 60 PX",
+  "Fun active day out with the team, around 50 PX",
+  "Cosy Sunday reset, under 40 PX",
+  "Treat my partner to a date night, up to 80 PX",
+  "Learn something new this month, budget 50 PX",
 ];
 
 export default async function Planner({
@@ -48,7 +48,7 @@ export default async function Planner({
       {/* Search */}
       <form action="/planner" method="get" className="card" style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 8px 8px 20px", marginBottom: 18, borderRadius: 999 }}>
         <i className="ti ti-sparkles" style={{ color: "var(--orange)", fontSize: 20 }} />
-        <input name="q" defaultValue={query} placeholder="“something calming this weekend, under €60”…" className="input" style={{ border: "none", background: "transparent", padding: "10px 0", flex: 1 }} autoFocus />
+        <input name="q" defaultValue={query} placeholder="“something calming this weekend, under 60 PX”…" className="input" style={{ border: "none", background: "transparent", padding: "10px 0", flex: 1 }} autoFocus />
         <button type="submit" className="btn btn-ink">
           Build combo <i className="ti ti-arrow-right" />
         </button>

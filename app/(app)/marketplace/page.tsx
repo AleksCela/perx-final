@@ -7,8 +7,10 @@ import { getOfferLikes, ratingOf } from "@/lib/catalog";
 import { getDeptStandings } from "@/lib/insights";
 import { buildCombo } from "@/lib/planner";
 import { money } from "@/lib/money";
+import { offerImage } from "@/lib/images";
 import OfferCard, { type CardOffer } from "../../components/OfferCard";
 import Countdown from "../../components/Countdown";
+import GiftBox from "../../components/GiftBox";
 
 export const dynamic = "force-dynamic";
 
@@ -53,6 +55,7 @@ export default async function Marketplace({
     id: o.id,
     title: o.title,
     icon: o.icon,
+    image: offerImage({ icon: o.icon, categorySlug: o.category.slug, seed: o.id }),
     price: o.price,
     originalPrice: o.originalPrice,
     providerName: o.provider.name,
@@ -96,7 +99,7 @@ export default async function Marketplace({
           <input
             name="q"
             defaultValue=""
-            placeholder="“cosy Sunday reset, under €40”…"
+            placeholder="“cosy Sunday reset, under 40 PX”…"
             className="input"
             style={{ border: "none", background: "transparent", padding: "10px 0", flex: 1 }}
           />
@@ -223,7 +226,7 @@ export default async function Marketplace({
 
         <Link href="/drops#mystery" className="card" style={{ padding: 20, display: "block" }}>
           <div className="kick" style={{ color: "var(--orange-d)", marginBottom: 10 }}>Mystery box</div>
-          <div style={{ fontSize: 44, textAlign: "center" }}>🎁</div>
+          <div style={{ display: "flex", justifyContent: "center" }}><GiftBox size={64} /></div>
           <div style={{ fontSize: 13.5, color: "var(--muted)", textAlign: "center", margin: "10px 0 15px" }}>
             A wrapped perk within budget
           </div>

@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
 import { money } from "@/lib/money";
+import { offerImage } from "@/lib/images";
 import { claimDrop } from "../../actions";
 import Countdown from "../../components/Countdown";
 import MysteryBox from "../../components/MysteryBox";
@@ -65,9 +66,17 @@ export default async function Drops({ searchParams }: { searchParams: Promise<{ 
           const soldOut = left <= 0;
           return (
             <div key={d.id} className="card hover-lift" style={{ padding: 0, overflow: "hidden", opacity: soldOut ? 0.65 : 1 }}>
-              <div style={{ height: 64, background: d.offer.provider.color, display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: 10 }}>
-                <span className="pill" style={{ background: "#fff", color: d.offer.provider.color }}>−{d.discountPct}%</span>
-                <span className="pill" style={{ background: "rgba(0,0,0,.25)", color: "#fff" }}>
+              <div style={{ height: 96, position: "relative", display: "flex", alignItems: "flex-start", justifyContent: "space-between", padding: 10 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={offerImage({ icon: d.offer.icon, categorySlug: d.offer.category.slug, seed: d.offer.id })}
+                  alt={d.offer.title}
+                  loading="lazy"
+                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", background: d.offer.provider.color, filter: soldOut ? "grayscale(1)" : "none" }}
+                />
+                <span style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 60%)" }} />
+                <span className="pill" style={{ position: "relative", background: "#fff", color: d.offer.provider.color }}>−{d.discountPct}%</span>
+                <span className="pill" style={{ position: "relative", background: "rgba(0,0,0,.4)", color: "#fff" }}>
                   {soldOut ? "Gone" : <Countdown expires={d.expiresAt.toISOString()} />}
                 </span>
               </div>
@@ -108,7 +117,7 @@ export default async function Drops({ searchParams }: { searchParams: Promise<{ 
               It lands in your orders, pending a quick approval, and earns you the <b>Mystery fan</b> badge.
             </p>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 4 }}>
-              <span className="pill" style={{ background: "rgba(255,106,31,.14)", color: "var(--orange-d)" }}>🎁 Free perk</span>
+              <span className="pill" style={{ background: "rgba(255,106,31,.14)", color: "var(--orange-d)" }}><i className="ti ti-gift" /> Free perk</span>
               <span className="pill" style={{ background: "rgba(31,91,224,.12)", color: "var(--blue-d)" }}>+75 pts</span>
               <span className="pill" style={{ background: "rgba(26,22,16,.06)", color: "var(--muted)" }}>Within your budget</span>
             </div>

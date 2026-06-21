@@ -34,7 +34,7 @@ async function main() {
     data: {
       name: "TeamSystem",
       country: "Albania",
-      currency: "EUR",
+      currency: "PX", // Perx's own in-app points currency — no real money
       taxRate: 0.41,
     },
   });
@@ -161,7 +161,7 @@ async function main() {
     { slug: "curator", name: "Curator", icon: "ti-wand", points: 90, description: "Booked an AI 3-provider combo." },
     { slug: "globetrot", name: "Globetrot", icon: "ti-plane", points: 100, description: "Booked a travel experience." },
     { slug: "marathon", name: "Marathon", icon: "ti-run", points: 300, description: "Won a steps championship." },
-    { slug: "big-spender", name: "Big spender", icon: "ti-coins", points: 100, description: "Spent over €200 in benefits." },
+    { slug: "big-spender", name: "Big spender", icon: "ti-coins", points: 100, description: "Spent over 200 PX in benefits." },
     { slug: "early-bird", name: "Early bird", icon: "ti-sunrise", points: 50, description: "Booked a morning perk." },
     { slug: "night-owl", name: "Night owl", icon: "ti-moon", points: 50, description: "Booked an evening perk." },
     { slug: "foodie", name: "Foodie", icon: "ti-tools-kitchen-2", points: 60, description: "Booked three food perks." },

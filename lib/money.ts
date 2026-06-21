@@ -1,15 +1,11 @@
-const SYMBOLS: Record<string, string> = {
-  EUR: "€",
-  ALL: "L",
-  USD: "$",
-  GBP: "£",
-};
+// Perx runs entirely on its own in-app points currency — "PX". There is no
+// real-world money anywhere in the product: budgets, perk prices, drops, gifts
+// and team pools are all denominated in PX. The optional `currency` argument is
+// kept only so existing call sites compile; it is intentionally ignored.
 
-export function symbol(currency = "EUR") {
-  return SYMBOLS[currency] ?? "";
-}
+export const PX = "PX";
 
-/** Format a whole-unit amount with the currency symbol, e.g. 1204 -> "€1,204". */
-export function money(amount: number, currency = "EUR") {
-  return `${symbol(currency)}${Math.round(amount).toLocaleString("en-US")}`;
+/** Format a whole-unit PX amount, e.g. 1204 -> "1,204 PX". */
+export function money(amount: number, _currency?: string) {
+  return `${Math.round(amount).toLocaleString("en-US")} ${PX}`;
 }

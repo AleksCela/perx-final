@@ -208,8 +208,8 @@ export function buildCombo(
   if (maxDist > 0) reasoning.push(`Everything within ${maxDist.toFixed(1)}km`);
   reasoning.push(
     underBudget >= 0
-      ? `${underBudget === 0 ? "Right on" : "€" + underBudget + " under"} your €${budget} budget`
-      : `Slightly over — swap one to fit €${budget}`
+      ? `${underBudget === 0 ? "Right on" : underBudget + " PX under"} your ${budget} PX budget`
+      : `Slightly over — swap one to fit ${budget} PX`
   );
 
   return {

@@ -8,6 +8,7 @@ import { getCurrentUser, SESSION_COOKIE } from "@/lib/session";
 import { getCartIds, CART_COOKIE } from "@/lib/cart";
 import { getBudget } from "@/lib/budget";
 import { addPoints, awardBadge } from "@/lib/points";
+import { SPIN_PRIZES } from "@/lib/constants";
 
 function ref() {
   return "PX-" + Math.random().toString(36).slice(2, 8).toUpperCase();
@@ -267,15 +268,6 @@ export async function rejectOrder(formData: FormData) {
 // --------------------------------------------------------------------------
 // Engagement: spin, reactions, reviews, gifts, pools, referrals
 // --------------------------------------------------------------------------
-
-const SPIN_PRIZES = [
-  { label: "Double-points Friday", points: 120 },
-  { label: "Lucky points", points: 80 },
-  { label: "Mega bonus", points: 200 },
-  { label: "Small win", points: 40 },
-  { label: "Steady streak", points: 60 },
-  { label: "Jackpot!", points: 300 },
-];
 
 export async function spin() {
   const user = await getCurrentUser();

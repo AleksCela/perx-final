@@ -5,6 +5,7 @@ import { requireUser } from "@/lib/session";
 import { getCartIds } from "@/lib/cart";
 import { ratingOf } from "@/lib/catalog";
 import { money } from "@/lib/money";
+import { offerImage } from "@/lib/images";
 import { REACTION_EMOJIS, GIFT_OPTIONS } from "@/lib/constants";
 import Stars from "../../../components/Stars";
 import {
@@ -72,24 +73,28 @@ export default async function OfferDetail({ params }: { params: Promise<{ id: st
     <div className="grid" style={{ gridTemplateColumns: "1.4fr 1fr", alignItems: "start" }}>
       {/* detail */}
       <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-        <div style={{ height: 120, background: offer.provider.color, position: "relative", display: "flex", alignItems: "flex-end", padding: 13 }}>
+        <div style={{ height: 180, position: "relative", display: "flex", alignItems: "flex-end", padding: 13 }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={offerImage({ icon: offer.icon, categorySlug: offer.category.slug, seed: offer.id }, 960, 480)}
+            alt={offer.title}
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", background: offer.provider.color }}
+          />
+          <span style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,.15) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,.5) 100%)" }} />
           {bookedToday > 0 ? (
-            <span className="pill" style={{ background: "#fff", color: offer.provider.color }}>
+            <span className="pill" style={{ position: "relative", background: "#fff", color: offer.provider.color }}>
               <i className="ti ti-flame" /> Trending in your office · {bookedToday} booked today
             </span>
           ) : (
-            <span className="pill" style={{ background: "#fff", color: offer.provider.color }}>
+            <span className="pill" style={{ position: "relative", background: "#fff", color: offer.provider.color }}>
               <i className={`ti ${offer.category.icon}`} /> {offer.category.name}
             </span>
           )}
           {offer.distanceKm != null && (
-            <span className="pill" style={{ position: "absolute", top: 13, right: 13, background: "rgba(0,0,0,.3)", color: "#fff" }}>
+            <span className="pill" style={{ position: "absolute", top: 13, right: 13, background: "rgba(0,0,0,.4)", color: "#fff" }}>
               <i className="ti ti-map-pin" /> {offer.distanceKm}km
             </span>
           )}
-          <span style={{ position: "absolute", top: 12, left: 13, fontSize: 40, color: "rgba(255,255,255,.9)" }}>
-            <i className={`ti ${offer.icon}`} />
-          </span>
         </div>
 
         <div style={{ padding: 16 }}>

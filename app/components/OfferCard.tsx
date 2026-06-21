@@ -7,6 +7,7 @@ export type CardOffer = {
   id: string;
   title: string;
   icon: string;
+  image: string;
   price: number;
   originalPrice: number | null;
   providerName: string;
@@ -28,25 +29,34 @@ export default function OfferCard({
   inCart?: boolean;
 }) {
   return (
-    <div className="card hover-lift" style={{ padding: 16, display: "flex", flexDirection: "column", gap: 12 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+    <div className="card hover-lift" style={{ padding: 0, overflow: "hidden", display: "flex", flexDirection: "column" }}>
+      <Link href={`/offer/${offer.id}`} style={{ position: "relative", display: "block", height: 150 }}>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={offer.image}
+          alt={offer.title}
+          loading="lazy"
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", background: "#ece3d2" }}
+        />
+        <span style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,.45) 100%)" }} />
         <span
-          style={{
-            width: 42,
-            height: 42,
-            borderRadius: 11,
-            background: offer.providerColor,
-            color: "#fff",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 20,
-            flex: "none",
-          }}
+          className="pill"
+          style={{ position: "absolute", left: 12, top: 12, background: offer.providerColor, color: "#fff" }}
         >
-          <i className={`ti ${offer.icon}`} />
+          <i className={`ti ${offer.icon}`} /> {offer.categoryName}
         </span>
-        <div style={{ flex: 1, minWidth: 0 }}>
+        {offer.distanceKm != null && (
+          <span
+            className="pill"
+            style={{ position: "absolute", right: 12, top: 12, background: "rgba(0,0,0,.4)", color: "#fff" }}
+          >
+            <i className="ti ti-map-pin" /> {offer.distanceKm}km
+          </span>
+        )}
+      </Link>
+
+      <div style={{ padding: 16, display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
+        <div style={{ minWidth: 0 }}>
           <Link href={`/offer/${offer.id}`} className="d" style={{ fontSize: 16, fontWeight: 600, display: "block" }}>
             {offer.title}
           </Link>
@@ -54,18 +64,12 @@ export default function OfferCard({
             {offer.providerName} · {offer.categoryName}
           </div>
         </div>
-      </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, color: "var(--muted)" }}>
         <Stars rating={offer.rating} size={13} />
         <span>{offer.rating.toFixed(1)}</span>
         <span style={{ color: "rgba(26,22,16,.25)" }}>·</span>
         <span>{offer.reviewCount} reviews</span>
-        {offer.distanceKm != null && (
-          <span style={{ marginLeft: "auto" }}>
-            <i className="ti ti-map-pin" /> {offer.distanceKm}km
-          </span>
-        )}
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: "auto" }}>
@@ -98,6 +102,7 @@ export default function OfferCard({
         <Link href={`/offer/${offer.id}`} className="btn btn-ink" style={{ padding: "8px 14px", fontSize: 13 }}>
           View
         </Link>
+      </div>
       </div>
     </div>
   );

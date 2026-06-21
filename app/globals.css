@@ -243,3 +243,7 @@ a {
 @keyframes spin360 {
   to { transform: rotate(var(--turn, 1440deg)); }
 }
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}

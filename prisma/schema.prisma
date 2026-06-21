@@ -19,7 +19,7 @@ model Company {
   id          String       @id @default(cuid())
   name        String
   country     String       @default("Albania")
-  currency    String       @default("EUR") // ISO code; drives formatting
+  currency    String       @default("PX") // Perx in-app points currency; display is always PX
   taxRate     Float        @default(0.41) // employer+employee burden avoided vs. taxed salary
   departments Department[]
   users       User[]
