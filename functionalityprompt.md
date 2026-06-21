@@ -28,7 +28,7 @@ AI should be part of the product, not an afterthought. Use it where it makes the
 Directions to explore
 Optional sparks - bring your own ideas and surprise us:
 ›
-An AI benefits concierge employees can simply talk to ("find me something relaxing under my budget")
+An AI benefits planner employees can simply talk to ("find me something relaxing under my budget")
 ›
 Gamified savings or wellness goals, streaks, and team challenges
 ›

@@ -6,7 +6,7 @@
 A working two-sided benefits marketplace MVP. Employees browse and build perk
 combos (single deals or **packages spanning several providers**), employers
 approve them, and a **simulated payment routes directly to each provider** — the
-money never passes through the employee's hands. Plus an AI concierge, Friday
+money never passes through the employee's hands. Plus an AI planner, Friday
 drops, a mystery box, and a full gamification layer to make it a habit, not a chore.
 
 Built with **Next.js 16 (App Router) · React 19 · Prisma 6 · SQLite**.
@@ -29,7 +29,7 @@ npm run dev          # http://localhost:3000
 ## The 60-second demo
 
 1. On the landing page, **enter as Kedi Kacorri** (an employee).
-2. Open the **Concierge**, type a feeling + budget
+2. Open the **Planner**, type a feeling + budget
    (e.g. *“stressed before a launch, something calming this weekend under €60”*)
    and hit **Build combo** → the AI assembles a cross-provider combo with a
    reasoning panel and a live budget meter. Click **Book all**.
@@ -44,7 +44,7 @@ npm run dev          # http://localhost:3000
 
 | Persona | Role | Sees |
 |---|---|---|
-| Kedi, Priya, Tom, Sara… | **Employee** | Marketplace, Concierge, Drops, Play, Wallet, Orders |
+| Kedi, Priya, Tom, Sara… | **Employee** | Marketplace, Planner, Drops, Play, Wallet, Orders |
 | Elira Hysa | **Employer / HR** | Approvals queue, tax-savings counter, adoption & category analytics, payment feed |
 | Driton | **Provider** (Studio Vertigo) | Their offers, bookings, incoming payments, rating |
 
@@ -53,7 +53,7 @@ npm run dev          # http://localhost:3000
 **Core loop** — browse → build a combo (cross-provider package) → submit → employer
 approves → simulated payment per provider → benefit confirmed.
 
-**AI** — the concierge ([`lib/concierge.ts`](lib/concierge.ts)) turns a free-text
+**AI** — the planner ([`lib/planner.ts`](lib/planner.ts)) turns a free-text
 *feeling + budget* into a complementary, cross-provider combo using a mood lexicon,
 a scoring pass over the catalog, and a budget-aware bundler — with a human
 explanation for every pick. Deterministic and fully offline. It also powers the
@@ -81,11 +81,11 @@ app/
   page.tsx              persona picker / "log in as"
   actions.ts            all server actions (book, approve+pay, spin, gift, …)
   (app)/                authenticated shell (top nav, role-aware)
-    marketplace/  concierge/  offer/[id]/  cart/  orders/
+    marketplace/  planner/  offer/[id]/  cart/  orders/
     admin/  wallet/  play/  drops/  provider/
   components/           TopNav, OfferCard, SpinWheel, MysteryBox, Countdown, CountUp, BadgeWall, Stars
 lib/
-  prisma.ts session.ts budget.ts points.ts concierge.ts catalog.ts insights.ts cart.ts money.ts
+  prisma.ts session.ts budget.ts points.ts planner.ts catalog.ts insights.ts cart.ts money.ts
 prisma/
   schema.prisma         Company, Department, User, Provider, Category, Offer, Drop,
                         Order/OrderItem, Payment, Review, Reaction, Badge/UserBadge,

@@ -1,6 +1,6 @@
 AI-powered
 
-Vibe search concierge — type a feeling + budget, AI builds a cross-provider combo
+Vibe search planner — type a feeling + budget, AI builds a cross-provider combo
 Auto-bundles with a reason — AI proposes packages and explains the logic
 Benefit twin — recommendations from similar employees, not just popularity
 

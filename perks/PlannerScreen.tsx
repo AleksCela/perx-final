@@ -12,10 +12,10 @@ const __html = String.raw`<style>
 .cc .kick{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
 </style>
 <div class="cc">
-  <h2 class="sr-only">AI vibe concierge: a typed feeling and budget produce a cross-provider perk combo with reasoning and a live budget meter.</h2>
+  <h2 class="sr-only">AI vibe planner: a typed feeling and budget produce a cross-provider perk combo with reasoning and a live budget meter.</h2>
   <div class="g" style="display:flex;align-items:center;gap:12px;padding:10px 16px;margin-bottom:16px">
     <span class="d" style="font-size:21px;font-weight:800">perks<span style="color:var(--orange)">.</span></span>
-    <span class="pill" style="background:var(--ink);color:#fff"><i class="ti ti-sparkles" aria-hidden="true"></i> Concierge</span>
+    <span class="pill" style="background:var(--ink);color:#fff"><i class="ti ti-sparkles" aria-hidden="true"></i> Planner</span>
     <span style="margin-left:auto" class="pill" style="background:var(--orange);color:#fff"><i class="ti ti-ticket" aria-hidden="true"></i> &euro;480 budget</span>
   </div>
 
@@ -93,6 +93,6 @@ const __html = String.raw`<style>
   </div>
 </div>`;
 
-export default function ConciergeScreen() {
+export default function PlannerScreen() {
   return <div className="perks-screen" dangerouslySetInnerHTML={{ __html }} />;
 }

@@ -381,7 +381,7 @@ async function main() {
     ["erion@teamsystem.al", ["cooking"], 18],
   ];
   for (const [email, keys, day] of history) {
-    await createPaidOrder(email, keys, day, keys.length >= 3 ? "CONCIERGE" : "MANUAL");
+    await createPaidOrder(email, keys, day, keys.length >= 3 ? "PLANNER" : "MANUAL");
   }
 
   console.log("Seeding a pending approval (live demo)…");
@@ -392,7 +392,7 @@ async function main() {
     data: {
       userId: users["priya@teamsystem.al"].id,
       status: "PENDING",
-      source: "CONCIERGE",
+      source: "PLANNER",
       title: "Decompress combo",
       total: pendingTotal,
       reasoning: "A calming wind-down across two providers, chosen to fit a single weekend within budget.",

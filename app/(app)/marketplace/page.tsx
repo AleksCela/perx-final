@@ -5,7 +5,7 @@ import { getBudget } from "@/lib/budget";
 import { getCartIds } from "@/lib/cart";
 import { getOfferLikes, ratingOf } from "@/lib/catalog";
 import { getDeptStandings } from "@/lib/insights";
-import { buildCombo } from "@/lib/concierge";
+import { buildCombo } from "@/lib/planner";
 import { money } from "@/lib/money";
 import OfferCard, { type CardOffer } from "../../components/OfferCard";
 import Countdown from "../../components/Countdown";
@@ -64,7 +64,7 @@ export default async function Marketplace({
     reviewCount: o._count.reviews,
   }));
 
-  // Featured AI bundle (computed live by the concierge engine).
+  // Featured AI bundle (computed live by the planner engine).
   const bundle = buildCombo(offerLikes, "friday wind-down, calm and social", Math.min(70, budget.remaining || 70), taxRate);
 
   // Live activity — department-level social proof.
@@ -91,7 +91,7 @@ export default async function Marketplace({
           <span style={{ color: "var(--orange)" }}>Describe a feeling.</span>
         </h1>
 
-        <form action="/concierge" method="get" className="card" style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 8px 8px 20px", margin: "22px 0 4px", maxWidth: 660, borderRadius: 999 }}>
+        <form action="/planner" method="get" className="card" style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 8px 8px 20px", margin: "22px 0 4px", maxWidth: 660, borderRadius: 999 }}>
           <i className="ti ti-sparkles" style={{ color: "var(--orange)", fontSize: 20 }} />
           <input
             name="q"
@@ -150,7 +150,7 @@ export default async function Marketplace({
           <div style={{ marginTop: "auto", display: "flex", alignItems: "baseline", gap: 11, paddingTop: 18 }}>
             <span className="d" style={{ fontSize: 32, fontWeight: 800 }}>{money(bundle.total, currency)}</span>
             <span style={{ fontSize: 12.5, color: "rgba(255,255,255,.85)" }}>saves {money(bundle.taxSaving, currency)} vs taxed</span>
-            <Link href="/concierge?q=friday+wind-down" className="btn" style={{ marginLeft: "auto", background: "#fff", color: "var(--blue-d)" }}>
+            <Link href="/planner?q=friday+wind-down" className="btn" style={{ marginLeft: "auto", background: "#fff", color: "var(--blue-d)" }}>
               See logic
             </Link>
           </div>

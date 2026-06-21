@@ -2,7 +2,7 @@ import Link from "next/link";
 import { requireUser } from "@/lib/session";
 import { getBudget } from "@/lib/budget";
 import { getOfferLikes } from "@/lib/catalog";
-import { buildCombo } from "@/lib/concierge";
+import { buildCombo } from "@/lib/planner";
 import { money } from "@/lib/money";
 import { bookCombo } from "../../actions";
 
@@ -16,7 +16,7 @@ const EXAMPLES = [
   "Learn something new this month, budget €50",
 ];
 
-export default async function Concierge({
+export default async function Planner({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string }>;
@@ -37,7 +37,7 @@ export default async function Concierge({
     <div>
       <div className="g" style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", marginBottom: 18 }}>
         <span className="pill" style={{ background: "var(--ink)", color: "#fff" }}>
-          <i className="ti ti-sparkles" /> AI Concierge
+          <i className="ti ti-sparkles" /> AI Planner
         </span>
         <span style={{ fontSize: 13.5, color: "var(--muted)" }}>Type a feeling and a budget — I build a cross-provider combo.</span>
         <span className="pill" style={{ marginLeft: "auto", background: "var(--orange)", color: "#fff" }}>
@@ -46,7 +46,7 @@ export default async function Concierge({
       </div>
 
       {/* Search */}
-      <form action="/concierge" method="get" className="card" style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 8px 8px 20px", marginBottom: 18, borderRadius: 999 }}>
+      <form action="/planner" method="get" className="card" style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 8px 8px 20px", marginBottom: 18, borderRadius: 999 }}>
         <i className="ti ti-sparkles" style={{ color: "var(--orange)", fontSize: 20 }} />
         <input name="q" defaultValue={query} placeholder="“something calming this weekend, under €60”…" className="input" style={{ border: "none", background: "transparent", padding: "10px 0", flex: 1 }} autoFocus />
         <button type="submit" className="btn btn-ink">
@@ -59,7 +59,7 @@ export default async function Concierge({
           <div className="kick" style={{ marginBottom: 12 }}>Try saying…</div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {EXAMPLES.map((ex) => (
-              <Link key={ex} href={`/concierge?q=${encodeURIComponent(ex)}`} className="card hover-lift" style={{ padding: "12px 16px", display: "flex", alignItems: "center", gap: 10 }}>
+              <Link key={ex} href={`/planner?q=${encodeURIComponent(ex)}`} className="card hover-lift" style={{ padding: "12px 16px", display: "flex", alignItems: "center", gap: 10 }}>
                 <i className="ti ti-message-chatbot" style={{ color: "var(--orange)" }} />
                 <span style={{ fontSize: 14.5 }}>{ex}</span>
                 <i className="ti ti-arrow-right" style={{ marginLeft: "auto", color: "var(--muted)" }} />
@@ -140,9 +140,9 @@ export default async function Concierge({
 
                 {/* refine */}
                 <div style={{ display: "flex", gap: 7, marginTop: 10, flexWrap: "wrap" }}>
-                  <Link href={`/concierge?q=${encodeURIComponent(query + " cheaper")}`} className="pill" style={{ border: "1px solid rgba(26,22,16,.25)", color: "var(--ink)" }}>Make it cheaper</Link>
-                  <Link href={`/concierge?q=${encodeURIComponent(query + " social")}`} className="pill" style={{ border: "1px solid rgba(26,22,16,.25)", color: "var(--ink)" }}>More social</Link>
-                  <Link href={`/concierge?q=${encodeURIComponent(query + " active")}`} className="pill" style={{ border: "1px solid rgba(26,22,16,.25)", color: "var(--ink)" }}>More active</Link>
+                  <Link href={`/planner?q=${encodeURIComponent(query + " cheaper")}`} className="pill" style={{ border: "1px solid rgba(26,22,16,.25)", color: "var(--ink)" }}>Make it cheaper</Link>
+                  <Link href={`/planner?q=${encodeURIComponent(query + " social")}`} className="pill" style={{ border: "1px solid rgba(26,22,16,.25)", color: "var(--ink)" }}>More social</Link>
+                  <Link href={`/planner?q=${encodeURIComponent(query + " active")}`} className="pill" style={{ border: "1px solid rgba(26,22,16,.25)", color: "var(--ink)" }}>More active</Link>
                 </div>
               </div>
             </div>

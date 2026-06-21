@@ -102,7 +102,7 @@ model Offer {
   price        Int      // current price in currency units
   originalPrice Int?    // for showing a strike-through / savings
   icon         String   @default("ti-sparkles")
-  moodTags     String   @default("") // CSV, powers the AI concierge ("calm,solo,weekend")
+  moodTags     String   @default("") // CSV, powers the AI planner ("calm,solo,weekend")
   location     String   @default("")
   distanceKm   Float?
   active       Boolean  @default(true)
@@ -139,7 +139,7 @@ model Drop {
 // ---------------------------------------------------------------------------
 
 /// status: PENDING | APPROVED | REJECTED | PAID
-/// source: MANUAL | CONCIERGE | DROP | MYSTERY | GIFT
+/// source: MANUAL | PLANNER | DROP | MYSTERY | GIFT
 model Order {
   id           String   @id @default(cuid())
   userId       String
@@ -148,7 +148,7 @@ model Order {
   source       String   @default("MANUAL")
   title        String   @default("Perk selection")
   total        Int      @default(0)
-  reasoning    String   @default("") // AI explanation when source = CONCIERGE
+  reasoning    String   @default("") // AI explanation when source = PLANNER
   note         String   @default("")
   createdAt    DateTime @default(now())
   approvedAt   DateTime?

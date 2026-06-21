@@ -33,10 +33,10 @@ export default async function Cart() {
         <div className="card" style={{ padding: 40, textAlign: "center", marginTop: 20 }}>
           <div style={{ fontSize: 44 }}>🛍️</div>
           <div className="d" style={{ fontSize: 20, fontWeight: 700, marginTop: 10 }}>Your combo is empty</div>
-          <p style={{ fontSize: 14, color: "var(--muted)" }}>Add perks from the marketplace or ask the concierge to build one.</p>
+          <p style={{ fontSize: 14, color: "var(--muted)" }}>Add perks from the marketplace or ask the planner to build one.</p>
           <div style={{ display: "flex", gap: 10, justifyContent: "center", marginTop: 14 }}>
             <Link href="/marketplace" className="btn btn-ink">Browse perks</Link>
-            <Link href="/concierge" className="btn btn-ghost">Ask concierge</Link>
+            <Link href="/planner" className="btn btn-ghost">Ask planner</Link>
           </div>
         </div>
       ) : (

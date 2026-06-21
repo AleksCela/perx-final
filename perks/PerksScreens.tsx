@@ -1,7 +1,7 @@
 import React from "react";
 import LandingScreen from "./LandingScreen";
 import EarnScreen from "./EarnScreen";
-import ConciergeScreen from "./ConciergeScreen";
+import PlannerScreen from "./PlannerScreen";
 import AdminScreen from "./AdminScreen";
 import DropsMysteryScreen from "./DropsMysteryScreen";
 import SocialScreen from "./SocialScreen";
@@ -10,7 +10,7 @@ import GamificationScreen from "./GamificationScreen";
 export type PerksScreenKey =
   | "landing"
   | "earn"
-  | "concierge"
+  | "planner"
   | "admin"
   | "drops"
   | "social"
@@ -23,7 +23,7 @@ export const PERKS_SCREENS: {
 }[] = [
   { key: "landing", label: "Marketplace landing", Component: LandingScreen },
   { key: "earn", label: "Earn & wallet", Component: EarnScreen },
-  { key: "concierge", label: "AI vibe concierge", Component: ConciergeScreen },
+  { key: "planner", label: "AI vibe planner", Component: PlannerScreen },
   { key: "admin", label: "Admin · tax-savings", Component: AdminScreen },
   { key: "drops", label: "Drops & mystery box", Component: DropsMysteryScreen },
   { key: "social", label: "Social · reviews & gifting", Component: SocialScreen },

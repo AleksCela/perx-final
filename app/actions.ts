@@ -14,7 +14,7 @@ function ref() {
 }
 
 function revalidateApp() {
-  for (const p of ["/marketplace", "/concierge", "/cart", "/orders", "/wallet", "/drops", "/play", "/admin", "/provider"]) {
+  for (const p of ["/marketplace", "/planner", "/cart", "/orders", "/wallet", "/drops", "/play", "/admin", "/provider"]) {
     revalidatePath(p);
   }
 }
@@ -140,8 +140,8 @@ export async function bookCombo(formData: FormData) {
   const offerIds = String(formData.get("offerIds") || "").split(",").filter(Boolean);
   const title = String(formData.get("title") || "");
   const reasoning = String(formData.get("reasoning") || "");
-  if (!offerIds.length) redirect("/concierge");
-  await createOrder({ userId: user.id, offerIds, source: "CONCIERGE", title, reasoning });
+  if (!offerIds.length) redirect("/planner");
+  await createOrder({ userId: user.id, offerIds, source: "PLANNER", title, reasoning });
   revalidateApp();
   redirect("/orders?submitted=1");
 }

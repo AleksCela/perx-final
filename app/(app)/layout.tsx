@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 const EMPLOYEE_LINKS: NavLink[] = [
   { href: "/marketplace", label: "Discover", icon: "ti-compass" },
-  { href: "/concierge", label: "Concierge", icon: "ti-sparkles" },
+  { href: "/planner", label: "Planner", icon: "ti-sparkles" },
   { href: "/drops", label: "Drops", icon: "ti-bolt" },
   { href: "/play", label: "Play", icon: "ti-ferris-wheel" },
   { href: "/wallet", label: "Wallet", icon: "ti-wallet" },

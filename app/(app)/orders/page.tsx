@@ -13,7 +13,7 @@ const STATUS: Record<string, { label: string; bg: string; fg: string; icon: stri
 };
 
 const SOURCE: Record<string, string> = {
-  CONCIERGE: "AI concierge",
+  PLANNER: "AI planner",
   DROP: "Friday drop",
   MYSTERY: "Mystery box",
   MANUAL: "Marketplace",

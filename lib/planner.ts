@@ -1,4 +1,4 @@
-// Perx AI concierge — turns a free-text "feeling + budget" into a cross-provider
+// Perx AI planner — turns a free-text "feeling + budget" into a cross-provider
 // combo with a human explanation. Fully deterministic and offline: a mood lexicon
 // scores the catalog, then a budget-aware bundler picks complementary offers from
 // distinct providers. (Structured so a hosted LLM could be swapped in later.)

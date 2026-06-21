@@ -11,7 +11,7 @@ secondary/data) as the only accent colours, iOS-style frosted "Liquid Glass" chr
 |------|--------|--------|
 | `LandingScreen.tsx` | `LandingScreen` | Marketplace landing (hero, Friday drop, AI bundle, dept race, spin, mystery) |
 | `EarnScreen.tsx` | `EarnScreen` | Earn & wallet — stamp card, ways to earn, badges, championship |
-| `ConciergeScreen.tsx` | `ConciergeScreen` | AI vibe concierge — cross-provider combo with reasoning |
+| `PlannerScreen.tsx` | `PlannerScreen` | AI vibe planner — cross-provider combo with reasoning |
 | `AdminScreen.tsx` | `AdminScreen` | Admin/HR — running tax-savings counter + analytics |
 | `DropsMysteryScreen.tsx` | `DropsMysteryScreen` | Friday drops + mystery box reveal |
 | `SocialScreen.tsx` | `SocialScreen` | Perk detail (reviews/hype) + gifting + pool + referral |

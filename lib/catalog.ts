@@ -1,5 +1,5 @@
 import { prisma } from "./prisma";
-import type { OfferLike } from "./concierge";
+import type { OfferLike } from "./planner";
 
 const BASELINE_RATING = 4.5; // assume good-but-unproven for offers without reviews yet
 
@@ -39,7 +39,7 @@ export function toOfferLike(o: OfferWithRelations): OfferLike {
   };
 }
 
-/** All active offers shaped for the concierge / marketplace cards. */
+/** All active offers shaped for the planner / marketplace cards. */
 export async function getOfferLikes(): Promise<OfferLike[]> {
   const offers = await prisma.offer.findMany({
     where: { active: true },
