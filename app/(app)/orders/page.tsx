@@ -2,6 +2,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireUser } from "@/lib/session";
 import { money } from "@/lib/money";
+import QrButton from "./QrButton";
 
 export const dynamic = "force-dynamic";
 
@@ -67,9 +68,17 @@ export default async function Orders({ searchParams }: { searchParams: Promise<{
                   <i className={`ti ${st.icon}`} /> {st.label}
                 </span>
                 <span className="pill" style={{ background: "rgba(26,22,16,.06)", color: "var(--muted)" }}>{SOURCE[o.source] ?? o.source}</span>
+                {o.redeemedAt && (
+                  <span className="pill" style={{ background: "rgba(33,160,90,.14)", color: "#1f7a4d" }}>
+                    <i className="ti ti-discount-check" /> Redeemed
+                  </span>
+                )}
                 <span className="d" style={{ marginLeft: "auto", fontSize: 18, fontWeight: 700 }}>
                   {o.total === 0 ? "Free" : money(o.total, currency)}
                 </span>
+                {o.status === "PAID" && !o.redeemedAt && (
+                  <QrButton orderId={o.id} title={o.title} />
+                )}
               </div>
 
               {o.reasoning && (

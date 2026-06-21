@@ -105,22 +105,23 @@ export default async function Admin() {
       <div style={{ background: "var(--ink)", borderRadius: 20, padding: 22, color: "#FBF6EC", display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
         <div style={{ flex: 1, minWidth: 280 }}>
           <span className="pill" style={{ background: "var(--orange)", color: "#fff", marginBottom: 12 }}>
-            <i className="ti ti-trending-up" /> Untaxed value delivered
+            <i className="ti ti-trending-up" /> Tax saved this month
           </span>
           <div className="d" style={{ fontSize: 48, fontWeight: 800, lineHeight: 1 }}>
-            <CountUp value={stats.taxSaving} />
-            <span style={{ fontSize: 26 }}> PX</span>
+            <span style={{ fontSize: 32, fontWeight: 700, verticalAlign: "middle" }}>€</span>
+            <CountUp value={stats.monthlyTaxSaving} />
             <span style={{ color: "var(--orange)", fontSize: 24, fontWeight: 700 }}> saved</span>
           </div>
           <div style={{ fontSize: 13, color: "rgba(251,246,236,.7)", marginTop: 9 }}>
-            on {money(stats.benefitValue, currency)} of benefits booked, vs. paying the same value as{" "}
-            <b style={{ color: "#fff" }}>taxed salary</b> · ~{(1 + stats.taxRate).toFixed(2)} of benefit per 1 PX of cost
+            on €{stats.monthlyBenefitValue.toLocaleString("en-US")} of benefits approved this month, vs. paying the same
+            value as <b style={{ color: "#fff" }}>taxed salary</b> · {Math.round(stats.taxRate * 100)}% tax burden avoided
           </div>
         </div>
         <div style={{ textAlign: "right", borderLeft: "1px solid rgba(255,255,255,.16)", paddingLeft: 24 }}>
-          <div style={{ fontSize: 11, color: "rgba(251,246,236,.6)" }}>Avg saved / employee</div>
-          <div className="d" style={{ fontSize: 30, fontWeight: 700, color: "var(--orange)" }}>{money(stats.avgSaved, currency)}</div>
-          <div style={{ fontSize: 11, color: "rgba(251,246,236,.6)", marginTop: 10 }}>Counter ticks live as<br />perks are approved</div>
+          <div style={{ fontSize: 11, color: "rgba(251,246,236,.6)" }}>All-time tax saved</div>
+          <div className="d" style={{ fontSize: 30, fontWeight: 700, color: "var(--orange)" }}>€{stats.taxSaving.toLocaleString("en-US")}</div>
+          <div style={{ fontSize: 11, color: "rgba(251,246,236,.6)", marginTop: 10 }}>Avg per employee</div>
+          <div className="d" style={{ fontSize: 22, fontWeight: 700 }}>€{stats.avgSaved.toLocaleString("en-US")}</div>
         </div>
       </div>
 

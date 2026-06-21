@@ -22,7 +22,8 @@ const ADMIN_LINKS: NavLink[] = [
 ];
 
 const PROVIDER_LINKS: NavLink[] = [
-  { href: "/provider", label: "Provider", icon: "ti-building-store" },
+  { href: "/provider", label: "Dashboard", icon: "ti-chart-bar" },
+  { href: "/provider/scan", label: "Scan QR", icon: "ti-qrcode" },
 ];
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {

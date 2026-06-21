@@ -96,7 +96,7 @@ async function main() {
     ["vinyasa", "lila", "wellness", "Vinyasa flow class", 16, null, "ti-yoga", "energetic,wellness,morning,solo", "Studio Lila · Blloku", 0.8, "Dynamic morning flow to get the blood moving."],
     ["thermal", "aqua", "relax", "Thermal bath · 2hr pass", 24, null, "ti-bath", "calm,relax,weekend,wellness,solo", "Aqua Spa · Liqeni", 2.1, "Two hours in the thermal pools and steam room."],
     ["massage", "aqua", "relax", "Deep tissue massage · 60'", 38, null, "ti-massage", "calm,relax,wellness,solo", "Aqua Spa · Liqeni", 2.1, "Therapeutic 60-minute deep tissue massage."],
-    ["spaday", "aqua", "relax", "Spa day for two", 70, 70, "ti-hot-tub", "calm,relax,weekend,date,celebrate,social", "Aqua Spa · Liqeni", 2.1, "A full spa circuit for two — pools, sauna, tea lounge."],
+    ["paintingclass", "clay", "learning", "Painting class for two", 48, null, "ti-palette", "creative,social,date,weekend,learn", "Clay Studio · Ish-Blloku", 1.1, "A guided acrylic painting session for two — no experience needed, all materials provided."],
     ["gym", "pool", "wellness", "Gym monthly pass", 30, null, "ti-barbell", "energetic,fitness,wellness", "PoolHouse · Rr. e Kavajës", 1.2, "Unlimited gym access for a month."],
     ["pilates", "pool", "wellness", "Pilates · 5-pack", 45, null, "ti-stretching", "fitness,wellness,solo", "PoolHouse · Rr. e Kavajës", 1.2, "Five reformer pilates sessions."],
     ["coffee", "mon", "food", "Specialty coffee · 10 cups", 18, null, "ti-coffee", "social,food,coffee,morning", "Mon Café · Pazari i Ri", 0.4, "A ten-cup card for the best flat whites in town."],

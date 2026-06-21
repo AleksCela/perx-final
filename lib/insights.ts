@@ -47,6 +47,13 @@ export async function getCompanyStats(companyId: string) {
   const taxSaving = Math.round(benefitValue * taxRate);
   const avgSaved = headcount ? Math.round(taxSaving / headcount) : 0;
 
+  const monthStart = new Date();
+  monthStart.setDate(1);
+  monthStart.setHours(0, 0, 0, 0);
+  const monthlyOrders = paidOrders.filter((o) => new Date(o.approvedAt ?? o.createdAt) >= monthStart);
+  const monthlyBenefitValue = monthlyOrders.reduce((s, o) => s + o.total, 0);
+  const monthlyTaxSaving = Math.round(monthlyBenefitValue * taxRate);
+
   // committed (spend) across the company for budget-used %
   const committedAgg = await prisma.order.aggregate({
     _sum: { total: true },
@@ -101,6 +108,8 @@ export async function getCompanyStats(companyId: string) {
     perksBooked,
     taxSaving,
     avgSaved,
+    monthlyBenefitValue,
+    monthlyTaxSaving,
     budgetTotal,
     budgetUsed,
     budgetPct,

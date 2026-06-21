@@ -412,6 +412,23 @@ export async function submitRequest(formData: FormData) {
   revalidatePath("/requests");
 }
 
+export async function redeemOrder(formData: FormData) {
+  const user = await getCurrentUser();
+  if (!user || user.role !== "PROVIDER" || !user.providerId) redirect("/");
+  const orderId = String(formData.get("orderId") || "");
+  if (!orderId) return;
+  const order = await prisma.order.findUnique({
+    where: { id: orderId },
+    include: { items: { include: { offer: true } } },
+  });
+  if (!order || order.status !== "PAID" || order.redeemedAt) return;
+  const belongsToProvider = order.items.some((it) => it.offer.providerId === user.providerId);
+  if (!belongsToProvider) return;
+  await prisma.order.update({ where: { id: orderId }, data: { redeemedAt: new Date() } });
+  revalidatePath(`/provider/redeem/${orderId}`);
+  revalidatePath("/provider");
+}
+
 export async function referProvider(formData: FormData) {
   const user = await getCurrentUser();
   if (!user) redirect("/");
